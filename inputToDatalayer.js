@@ -1,4 +1,4 @@
-// Versão para teste no console com monitoramento completo
+// Versão para teste no console com monitoramento completo (sem changed)
 (function testAllInputs() {
   const debounceTime = 1000;
   const inputSelector =
@@ -18,9 +18,6 @@
       currentState[identifier] = {
         value: input.value,
         type: input.type,
-        changed: inputsCache.has(identifier)
-          ? input.value !== inputsCache.get(identifier).value
-          : false,
       };
     });
 
