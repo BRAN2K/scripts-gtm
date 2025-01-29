@@ -1,9 +1,7 @@
-// Versão para teste no console com monitoramento completo (sem changed)
 (function testAllInputs() {
   const debounceTime = 1000;
   const inputSelector =
-    'input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea';
-  let inputsCache = new Map();
+    "#id_email, #id_nome, #id_cpf, #id_telefone_celular, #id_cep, #id_endereco, #id_numero, #id_complemento, #id_referencia, #id_bairro, #id_cidade, #id_estado, #id_pais_id";
 
   // Função para escanear todos os inputs
   function scanAllInputs() {
@@ -17,11 +15,9 @@
         `input_${Math.random().toString(36).substr(2, 5)}`;
       currentState[identifier] = {
         value: input.value,
-        type: input.type,
       };
     });
 
-    inputsCache = new Map(Object.entries(currentState));
     return currentState;
   }
 
@@ -35,17 +31,14 @@
       const changedInput = {
         id: input.id,
         name: input.name,
-        type: input.type,
         newValue: input.value,
       };
 
       console.log(
-        "%c=== ATUALIZAÇÃO DE INPUTS ===",
-        "color: #4CAF50; font-weight: bold;"
+        `%c[BRIN] Input[${changedInput.name}] alterado para: "${changedInput.newValue}"`,
+        "color: #2196F3;"
       );
-      console.log("Input alterado:", changedInput);
-      console.log("Estado atual de todos os inputs:", allInputsData);
-      console.log("Simulação dataLayer:", {
+      LIgtagDataLayer.push({
         event: "formInputCompleted",
         changedInput: changedInput,
         allInputs: allInputsData,
@@ -73,14 +66,12 @@
       input.dataset.observed = "true";
     });
 
-    console.log("%c[TESTE] Monitoramento iniciado", "color: #2196F3;");
-    console.log("Inputs iniciais:", scanAllInputs());
+    console.log("%c[BRIN] Monitoramento iniciado", "color: #2196F3;");
+    LIgtagDataLayer.push({
+      event: "formInputInitiated",
+      allInputs: scanAllInputs(),
+    });
   }
 
-  // Iniciar quando o documento estiver pronto
-  if (document.readyState === "complete") {
-    init();
-  } else {
-    document.addEventListener("DOMContentLoaded", init);
-  }
+  init();
 })();
